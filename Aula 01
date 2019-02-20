@@ -1,0 +1,92 @@
+#################################
+## Data Preparation 
+## Aula 1 
+## Prof. Neylson Crepalde
+## Por Ana Beatriz Martins
+#################################
+
+# Instalar os pacotes necessários
+# install.packages("dplyr")
+
+# Carregar o pacote dplyr no ambiente
+library (dplyr)
+
+# Carregar o banco de dados Iris já embutido na memória
+data("iris")
+
+# Verificar os primeiros casos
+head(iris)
+
+# Verificar os nomes das variáveis
+names(iris)
+
+# Verificar a estrutura do objeto
+str(iris)
+
+# Verificar o tamanho do banco de dados
+dim(iris) # verifica linhas e colunas
+nrow(iris) # verifica numero de linhas
+ncol(iris) # verifica numero de colunas
+
+# Acessando a documentação do banco iris
+help (iris)
+?iris
+
+###########################################
+
+# Manipular os dados com dplyr
+
+# O pacote dplyr possui alguns "verbos" que executam ações especificas
+# no banco de dados.
+
+# O primeiro verbo que a gente vai usar é o Select, que seleciona colunas
+
+iris # printa o banco de dados inteiro, com 150 casos
+
+# Selecionando apenas a variavel Species
+select(iris, Species)
+
+# Selecionando apenas a variavel Length
+select(iris, Petal.Length)
+
+# Selecionando as duas juntas, retornando na ordem selecionada
+select(iris, Petal.Length, Species)
+
+# Selecionando pela posição
+names(iris)
+select(iris, 5, 3)
+
+# Selecionar varias variáveis
+select(iris, 1:4)
+select(iris, 4:2) # de trás para frente
+
+# Retirando uma variavel ou uma coluna do banco
+select(iris, -5) #retorna todas as colunas menos a 5
+select(iris, -Species)
+
+# Retirando duas variáveis
+select(iris, -Species, -Petal.Length)
+
+##################################################
+
+# QUando eu quero trabalhar (filtrar) com linhas, vou usar o verbro filter
+# filter - filtra linhas a partir de alguma condição
+head(iris) # conferindo banco
+
+# Filtra os casos em que sepal length for maior que 5
+filter(iris, Sepal.Length>5) # 5 não entra
+
+# Filtra os caos em que sepal length for menor ou igual a 4.5
+filter(iris, Sepal.Length<=4.5)  # se fosse maior, seria >=
+
+# Olhar para a variável Species
+# Categorica
+table(iris$Species)
+
+# Filtrando apenas a categoria 'setosa' da variável Species
+filter(iris, Species == "setosa")
+
+# Filtra todas menos 'setosa'
+filter(iris, Species != "setosa")
+
+
