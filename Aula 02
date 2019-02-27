@@ -1,0 +1,130 @@
+#################################
+## Data Preparation 
+## Aula 1 
+## Prof. Neylson Crepalde
+## Por Ana Beatriz Martins
+## 2019-02-26
+#################################
+
+# Instalar os pacotes necessários
+# install.packages("dplyr")
+
+# Carregar o pacote dplyr no ambiente
+library (dplyr)
+
+# Carregando o banco de dados iris
+data("iris")
+
+head(iris) # primeiros casos
+
+################
+# select() - seleciona colunas
+select(iris, 1)
+
+# Retorna a coluna pelo nome
+select(iris, Species)
+
+# Retorna as colunas Species e Sepal.Length
+select(iris, Species, Sepal.Length)
+
+# Retorna da segunda até a quarta coluna
+select(iris, 2:4)
+
+###########################################
+# filter () - filtra linhas ou casos de acordo com alguma condição que eu defino dentro da função
+
+# Filtrar apenas a especie versicolor
+filter(iris, Species == "versicolor")
+
+# Filtrar todas as espécies exceto versicolor
+filter(iris, Species != "versicolor")
+
+# Checar a distribuição da variável Sepal.Length
+summary(iris$Sepal.Length)
+
+# Filtra apenas os casos que Sepal.Length for maior que 7
+filter(iris, Sepal.Length >= 7)
+
+# Filtra apenas os casos menor que 5
+filter(iris, Sepal.Length < 5) # Sempre que eu for colocar uma condição em verbo dplyr e colocar virgula ele entende como E
+
+# Filtra Sepal.Length menor que 5 E apenas versicolor
+filter(iris, Sepal.Length < 5 & Species == "versicolor")
+# filter(iris, Sepal.Length < 5, Species == "versicolor")
+
+# Filtra os casos em que a variavel Sepal.Length seja menor do que 4.5 e Sepal.Length for maior do que 7.2
+filter(iris, Sepal.Length < 4.5 | Sepal.Length > 7.2)
+
+# Filtra os casos em que Sepal.Length for menor que 4.5 e 
+# Sepal.Width for menor ou igual à 3
+filter(iris, Sepal.Length < 4.5, Sepal.Width <= 3)
+
+####################################################
+# arrange() - ordena as linhas 
+arrange(iris, Sepal.Length, Petal.Width)
+
+# Ordenando do maior para o menor
+arrange(iris, desc(Sepal.Length))
+
+arrange(iris, desc(Sepal.Length), Petal.Length)
+
+####################################################
+# Realizar as mesmas tarefas usando o pipe
+iris %>% select(Species) %>% filter(Species != "virginica")
+  # crtl + shif + m faz o pipe
+  # tudo o que eu faço depois do pipe é do banco iris
+  # o resultado de um é usado no proximo outro
+
+# Filtrar os casos em que a variável Sepal.Length for menor do que 4.5
+# e selecionar as variáveis Petal.Length e Petal.Width.
+# Por questão de estilo, quebra-se a linha depois do pipe
+
+tabela = iris %>% 
+  filter (Sepal.Length < 4.5) %>%
+  select(Petal.Length, Petal.Width) %>% 
+  arrange(Petal.Length)
+
+tabela
+
+## Filtrar no banco de dados iris os casos em que Sepal.Length for maior que 7 ou menor que 5
+## Selecionar as variáveis Petal.Length e Species
+## E vai ordenar por Petal.Length descendente
+
+iris %>% 
+  filter (Sepal.Length > 7 | Sepal.Length < 5) %>% 
+  select(Petal.Length & Species) %>% 
+  arrange(desc(Petal.Length)) #erro
+
+#####################################################
+# mutate () - cria novas colunas
+
+# Vamos criar uma nova variável chamada pétala somando o 
+# tamanho e largura da pétala
+
+iris %>% 
+  mutate(PETAL = Petal.Length + Petal.Width) %>% 
+  select(Petal.Length, Petal.Width, PETAL)
+
+# Vamos criar uma nova variável chamada med_tam com a média dos tamanhos
+# tamanho de petala e sepala
+# Tenho que somar o tamanho da petala com o tamanho da sepala e dividir por 2
+
+iris %>% 
+  mutate(med_tam = (Sepal.Length + Petal.Length) / 2 ) %>% 
+  select(Sepal.Length, Petal.Length, med_tam) %>% 
+  head()
+
+################################################################
+# Vamos filtrar apenas os casos em que Sepal.Length for menor que cinco,
+# Criar duas novas variáveis, soma dos tamanhos
+# Segunda, Soma das larguras
+# Ordenar pela soma dos tamanhos  
+# e selecionar apenas a variável larguras
+
+iris %>% 
+  filter(Sepal.Length < 5) %>% 
+  mutate (tam = Sepal.Length + Petal.Length) %>% 
+  mutate (larg = Sepal.Width + Petal.Width) %>% 
+  arrange (tam) %>% 
+  select(larg)
+
